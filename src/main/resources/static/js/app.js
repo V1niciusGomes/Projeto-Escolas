@@ -1,3 +1,4 @@
+// Updated parts of app.js: add edit/delete buttons and handlers for Ferramenta and Funcionario
 const api = {
     funcionarios: '/api/funcionarios',
     emprestimos: '/api/emprestimos',
@@ -21,7 +22,19 @@ async function loadFuncionarios() {
             const ul = document.createElement('ul');
             data.forEach(f => {
                 const li = document.createElement('li');
-                li.textContent = `ID: ${f.id} - ${f.nome} (${f.matricula})`;
+                li.textContent = `ID: ${f.id} - ${f.nome} (${f.matricula}) `;
+                // edit button
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Editar';
+                editBtn.style.marginLeft = '8px';
+                editBtn.addEventListener('click', () => editFuncionario(f));
+                li.appendChild(editBtn);
+                // delete button
+                const delBtn = document.createElement('button');
+                delBtn.textContent = 'Excluir';
+                delBtn.style.marginLeft = '4px';
+                delBtn.addEventListener('click', () => deleteFuncionario(f.id));
+                li.appendChild(delBtn);
                 ul.appendChild(li);
             });
             el.appendChild(ul);
@@ -54,6 +67,48 @@ async function registerFuncionario(e) {
     }
 }
 
+async function editFuncionario(f) {
+    const novoNome = prompt('Nome:', f.nome);
+    if (novoNome === null) return; // cancelled
+    const novaMatricula = prompt('Matrícula:', f.matricula);
+    if (novaMatricula === null) return;
+    try {
+        const res = await fetch(`${api.funcionarios}/${f.id}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ nome: novoNome, matricula: novaMatricula })
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            alert('Erro: ' + (err.message || res.statusText));
+            return;
+        }
+        const data = await res.json();
+        alert('Funcionário atualizado: ' + pretty(data));
+        loadFuncionarios();
+    } catch (err) {
+        alert('Erro ao atualizar funcionário');
+        console.error(err);
+    }
+}
+
+async function deleteFuncionario(id) {
+    if (!confirm('Confirma exclusão do funcionário #' + id + '?')) return;
+    try {
+        const res = await fetch(`${api.funcionarios}/${id}`, { method: 'DELETE' });
+        if (res.status === 204) {
+            alert('Funcionário excluído');
+            loadFuncionarios();
+        } else {
+            const err = await res.json().catch(() => ({}));
+            alert('Erro: ' + (err.message || res.statusText));
+        }
+    } catch (err) {
+        alert('Erro ao excluir funcionário');
+        console.error(err);
+    }
+}
+
 // Ferramentas page
 async function loadFerramentas() {
     const el = document.getElementById('ferramentas-list');
@@ -66,7 +121,19 @@ async function loadFerramentas() {
             const ul = document.createElement('ul');
             data.forEach(f => {
                 const li = document.createElement('li');
-                li.textContent = `ID: ${f.id} - ${f.nome}`;
+                li.textContent = `ID: ${f.id} - ${f.nome} `;
+                // edit button
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Editar';
+                editBtn.style.marginLeft = '8px';
+                editBtn.addEventListener('click', () => editFerramenta(f));
+                li.appendChild(editBtn);
+                // delete button
+                const delBtn = document.createElement('button');
+                delBtn.textContent = 'Excluir';
+                delBtn.style.marginLeft = '4px';
+                delBtn.addEventListener('click', () => deleteFerramenta(f.id));
+                li.appendChild(delBtn);
                 ul.appendChild(li);
             });
             el.appendChild(ul);
@@ -99,7 +166,49 @@ async function registerFerramenta(e) {
     }
 }
 
-// Empréstimos page
+async function editFerramenta(f) {
+    const novoNome = prompt('Nome:', f.nome);
+    if (novoNome === null) return;
+    const novaDescricao = prompt('Descrição:', f.descricao || '');
+    if (novaDescricao === null) return;
+    try {
+        const res = await fetch(`${api.ferramentas}/${f.id}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ nome: novoNome, descricao: novaDescricao })
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            alert('Erro: ' + (err.message || res.statusText));
+            return;
+        }
+        const data = await res.json();
+        alert('Ferramenta atualizada: ' + pretty(data));
+        loadFerramentas();
+    } catch (err) {
+        alert('Erro ao atualizar ferramenta');
+        console.error(err);
+    }
+}
+
+async function deleteFerramenta(id) {
+    if (!confirm('Confirma exclusão da ferramenta #' + id + '?')) return;
+    try {
+        const res = await fetch(`${api.ferramentas}/${id}`, { method: 'DELETE' });
+        if (res.status === 204) {
+            alert('Ferramenta excluída');
+            loadFerramentas();
+        } else {
+            const err = await res.json().catch(() => ({}));
+            alert('Erro: ' + (err.message || res.statusText));
+        }
+    } catch (err) {
+        alert('Erro ao excluir ferramenta');
+        console.error(err);
+    }
+}
+
+// Empréstimos page functions remain unchanged
 async function verificarDisponibilidade(id) {
     const el = document.getElementById('disponibilidade-result');
     try {
