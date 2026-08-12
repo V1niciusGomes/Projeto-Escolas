@@ -1,0 +1,20 @@
+/* Basic styles for the simple frontend */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0 16px;
+  background: #f7f7f7;
+  color: #222;
+}
+header {
+  background: #2b3e50;
+  color: white;
+  padding: 12px 16px;
+}
+header h1 { margin: 0; }
+nav a { color: #dbe9ff; text-decoration: none; margin-right: 8px; }
+main { padding: 16px 0; }
+form { margin: 8px 0 16px 0; }
+input[type="text"], input[type="number"] { padding: 6px; margin-right: 6px; }
+button { padding: 6px 10px; }
+#ferramentas-list, #funcionarios-list, #historico-result, #disponibilidade-result { background: white; padding: 8px; border: 1px solid #ddd; margin-top: 8px; }

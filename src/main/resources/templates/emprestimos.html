@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Empréstimos - Sistema</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<header>
+    <h1>Empréstimos</h1>
+    <nav>
+        <a href="/">Home</a> |
+        <a href="/ferramentas">Ferramentas</a> |
+        <a href="/funcionarios">Funcionários</a>
+    </nav>
+</header>
+<main>
+    <section>
+        <h2>Registrar Empréstimo</h2>
+        <form id="emprestimo-form">
+            <input type="number" id="emprestimo-ferramentaId" placeholder="Ferramenta ID" required />
+            <input type="number" id="emprestimo-funcionarioId" placeholder="Funcionário ID" required />
+            <button type="submit">Registrar Empréstimo</button>
+        </form>
+        <h3>Verificar Disponibilidade</h3>
+        <form id="verificar-form">
+            <input type="number" id="verificar-ferramentaId" placeholder="Ferramenta ID" required />
+            <button type="submit">Verificar</button>
+        </form>
+        <div id="disponibilidade-result"></div>
+
+        <h2>Registrar Devolução</h2>
+        <form id="devolucao-form">
+            <input type="number" id="devolucao-emprestimoId" placeholder="Empréstimo ID" required />
+            <button type="submit">Registrar Devolução</button>
+        </form>
+
+        <h2>Histórico</h2>
+        <form id="historico-form">
+            <input type="number" id="historico-ferramentaId" placeholder="Ferramenta ID" />
+            <input type="number" id="historico-funcionarioId" placeholder="Funcionário ID" />
+            <button type="submit">Consultar Histórico</button>
+        </form>
+        <div id="historico-result"></div>
+    </section>
+</main>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>
