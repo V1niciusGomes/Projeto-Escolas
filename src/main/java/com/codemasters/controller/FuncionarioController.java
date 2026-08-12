@@ -5,6 +5,8 @@ import com.codemasters.repository.FuncionarioRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/funcionarios")
 public class FuncionarioController {
@@ -15,11 +17,21 @@ public class FuncionarioController {
         this.repository = repository;
     }
 
+    @GetMapping
+    public ResponseEntity<List<Funcionario>> listar() {
+        return ResponseEntity.ok(repository.findAll());
+    }
+
     @PostMapping
     public ResponseEntity<Funcionario> cadastrar(@RequestBody Funcionario funcionario) {
         Funcionario salvo = repository.save(funcionario);
         return ResponseEntity.ok(salvo);
     }
 
-    // você pode adicionar GET/PUT/DELETE conforme necessidade
+    @GetMapping("/{id}")
+    public ResponseEntity<Funcionario> buscarPorId(@PathVariable Long id) {
+        return repository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }
